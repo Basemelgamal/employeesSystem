@@ -114,12 +114,13 @@
                     <div class="col-md-3 col-lg-2">
                     @auth
                         <div id="sidebar">
-                            <a href="#" class="sidebar-link">Home</a>
-                            <a href="{{ route('departments.index') }}" class="sidebar-link">Departments</a>
-                            <a href="{{ route('employees.index') }}" class="sidebar-link">Employees</a>
-                            {{--  @can('publish tasks')
-                                <a href="{{ route('tasks.index') }}" class="sidebar-link">Tasks</a>
-                            @endcan  --}}
+                            <a href="{{ route('home') }}" class="sidebar-link">Home</a>
+                            @can('publish departments')
+                                <a href="{{ route('departments.index') }}" class="sidebar-link">Departments</a>
+                            @endcan
+                            @can('publish employees')
+                                <a href="{{ route('employees.index') }}" class="sidebar-link">Employees</a>
+                            @endcan
                         </div>
                     @endauth
                     </div>

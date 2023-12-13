@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\employeeManagerDepartment;
 use Illuminate\Http\Request;
 
 class HomeController extends Controller
@@ -23,6 +24,11 @@ class HomeController extends Controller
      */
     public function index()
     {
-        return view('home');
+        $input = [
+            'tasks'         => auth()->user()->tasks,
+            'is_employee'   => auth()->user()->isEmployee(),
+        ];
+
+        return view('home', $input);
     }
 }

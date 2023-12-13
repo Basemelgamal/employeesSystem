@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class employeeManagerDepartment extends Model
 {
-    use FileAttributes, HasFactory;
+    use HasFactory;
 
     protected $table = 'employee_manager_department';
 

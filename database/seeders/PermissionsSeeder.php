@@ -4,6 +4,7 @@ namespace Database\Seeders;
 
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\DB;
 use Spatie\Permission\Models\Role;
 use Spatie\Permission\Models\Permission;
 
@@ -21,9 +22,6 @@ class PermissionsSeeder extends Seeder
 
         // Create roles
         $roles = ['manager', 'employee'];
-        foreach ($roles as $roleName) {
-            Role::create(['name' => $roleName]);
-        }
 
         // Define permissions
         $permissions = [
@@ -43,11 +41,15 @@ class PermissionsSeeder extends Seeder
 
         // Assign each permission to every role
         foreach ($roles as $roleName) {
+            Role::create(['name' => $roleName]);
             $role = Role::findByName($roleName);
-
-            foreach ($permissions as $permissionName) {
-                $permission = Permission::findOrCreate($permissionName);
-                $role->givePermissionTo($permission);
+            if($role->name == 'manager'){
+                foreach ($permissions as $permissionName) {
+                    $permission = Permission::findOrCreate($permissionName);
+                    $role->givePermissionTo($permission);
+                }
+            }elseif($role->name == 'employee'){
+                $role->givePermissionTo(['edit tasks', 'publish tasks']);
             }
         }
     }

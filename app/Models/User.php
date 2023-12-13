@@ -99,7 +99,6 @@ class User extends Authenticatable
         }
     }
 
-
     // Scopes
     public function scopeName($query, $request)
     {
@@ -127,6 +126,17 @@ class User extends Authenticatable
     {
         return $this->belongsToMany(User::class, 'employee_manager_department', 'employee_id', 'manager_id')
             ->withPivot(['manager_id', 'department_id', 'salary', 'image']);
+    }
+
+    public function employee()
+    {
+        return $this->belongsToMany(User::class, 'employee_manager_department', 'employee_id', 'manager_id')
+            ->withPivot(['manager_id', 'department_id', 'salary', 'image']);
+    }
+
+    public function isEmployee()
+    {
+        return $this->employee()->exists();
     }
 
     public function departments()

@@ -52,9 +52,7 @@ class DepartmentController extends Controller
     {
         DB::beginTransaction();
         try {
-
             $this->departmentService->store($request->validated());
-
             DB::commit();
             return redirect()->route('departments.index')->with(['success' => 'Added Successfully']);
         }catch(\Throwable $th){
@@ -98,8 +96,12 @@ class DepartmentController extends Controller
      */
     public function update(Request $request, Department $department)
     {
+        $request->validate([
+            'name' => 'required|max:155',
+        ]);
+
         $data = [
-            'departments'     => $this->departmentService->update($request->validated(), $department),
+            'departments'   => $this->departmentService->update($request->only('name'), $department),
             'routeCreate'   => route('departments.create'),
         ];
 

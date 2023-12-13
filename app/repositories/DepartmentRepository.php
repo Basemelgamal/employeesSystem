@@ -11,7 +11,7 @@ class DepartmentRepository
     }
 
     public function update($data, $department){
-        return $department->update($data, $department);
+        return $department->update($data);
     }
 
     public function destroy($department){

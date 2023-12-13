@@ -53,16 +53,16 @@ class TaskController extends Controller
      */
     public function store(TaskRequest $request, User $employee)
     {
-        // DB::beginTransaction();
-        // try {
+        DB::beginTransaction();
+        try {
             $mergedData = array_merge($request->validated(), ['employee_id' => $employee->id]);
             $this->taskService->store($mergedData);
-            // DB::commit();
+            DB::commit();
             return redirect()->route('tasks.index', $employee->id)->with(['success' => 'Added Successfully']);
-        // }catch(\Throwable $th){
-        //     DB::rollBack();
-        //     return redirect()->back()->with(['error' => 'Failed']);
-        // }
+        }catch(\Throwable $th){
+            DB::rollBack();
+            return redirect()->back()->with(['error' => 'Failed']);
+        }
     }
 
     /**

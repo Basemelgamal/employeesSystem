@@ -8,6 +8,7 @@ use App\Models\User;
 use Illuminate\Foundation\Auth\RegistersUsers;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
+use Spatie\Permission\Models\Role;
 
 class RegisterController extends Controller
 {
@@ -50,7 +51,13 @@ class RegisterController extends Controller
     protected function validator(array $data)
     {
         return Validator::make($data, [
-            'name'  =>
+            'first_name'  =>
+                [
+                    'required',
+                    'string',
+                    'max:255'
+                ],
+            'last_name'  =>
                 [
                     'required',
                     'string',
@@ -68,7 +75,7 @@ class RegisterController extends Controller
                 [
                     'required',
                     'regex:/^(?:\+20|0)?(1[0-2]|2\d|1[5-9])[0-9]{8}$/',
-                    'unique:users', 'unique:users'
+                    'unique:users',
                 ],
             'password' =>
                 [
@@ -91,11 +98,20 @@ class RegisterController extends Controller
      */
     protected function create(array $data)
     {
-        return User::create([
-            'name' => $data['name'],
-            'email' => $data['email'],
-            'phone' => $data['phone'],
-            'password' => Hash::make($data['password']),
+        $user = User::create([
+            'first_name'=> $data['first_name'],
+            'last_name' => $data['last_name'],
+            'email'     => $data['email'],
+            'phone'     => $data['phone'],
+            'password'  => Hash::make($data['password']),
         ]);
+
+        // Find or create the role
+        $role = Role::findOrCreate('employee');
+
+        // Assign the role to the user
+        $user->assignRole($role);
+
+        return $user;
     }
 }
